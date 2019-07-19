@@ -20,7 +20,7 @@ abstract class Animal implements IAnimal
     protected $satiety = '';
     protected $satietyMax = ''; //будем забивать вручную через __construct
     protected $breed = '';
-    protected $volume = '';
+    public $volume = ''; // был protected
     protected $square = '';
     protected $inBox = 0;
 

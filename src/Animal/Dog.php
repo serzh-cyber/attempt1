@@ -13,7 +13,8 @@ use App\Animal\Abstraction\Animal;
 
 class Dog extends Animal
 {
-    protected $type = 1;
+    //protected $type = 1;
+    public $type = 1;
 
     public function speak(): void
     {
