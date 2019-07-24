@@ -9,6 +9,9 @@
 namespace App\Animal\Interfacing;
 
 
+use App\Box;
+use App\Feed;
+
 interface IAnimal
 {
     /**
@@ -26,15 +29,17 @@ interface IAnimal
     public function crawl(): void;
 
     /**
-     * Команда кушать
+     * Покормить питомца
      *
-     * @return int сытость повышается
+     * @param Feed $feed
      */
-    public function eat();
+    public function eat(Feed $feed): void;
+
     /**
-     * Команда кушать
+     * Команда туалет
      *
-     * @return int сходить по номеру два
+     * @param Box $box
+     * @return mixed
      */
-    public function toilet();
+    public function toilet(Box $box): void;
 }

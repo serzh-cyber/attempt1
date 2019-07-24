@@ -14,18 +14,29 @@ use App\Animal\Abstraction\Animal;
 class Cat extends Animal
 {
     //protected $type = 0;
-    public $type = 0;
+    protected $type = 0;
 
+    /**
+     * Команда голос
+     */
     public function speak(): void
     {
         echo 'Абырвалг' . '<br>';
     }
+
+    /**
+     * Команда ползать
+     */
     public function crawl(): void
     {
         echo 'Не БУДУ, Не БУДУ' . '<br>';
     }
-    public function toilet()
+
+    /**
+     * @return int
+     */
+    public function getType(): int
     {
-        // TODO: Implement toilet() method.
+        return $this->type;
     }
 }
