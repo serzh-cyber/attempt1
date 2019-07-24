@@ -8,22 +8,18 @@
 
 namespace App;
 
-
 use App\Animal\Abstraction\Animal;
 
 class Feed
 {
-    //protected $feedAmount = '';
-
     /**
      * Количество корма для животного
      *
      * @param Animal $animal
      * @return int
      */
-    public function getFeed(Animal $animal)
+    public function getFeed(Animal $animal): int
     {
         return $animal->getSatietyMax() - $animal->getSatiety() + 40;
     }
 }
-

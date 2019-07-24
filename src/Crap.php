@@ -8,7 +8,6 @@
 
 namespace App;
 
-
 class Crap
 {
     protected $crapInBox = 0;
@@ -20,6 +19,7 @@ class Crap
     {
         return $this->crapInBox;
     }
+
     /**
      * @param mixed $crapInBox
      */

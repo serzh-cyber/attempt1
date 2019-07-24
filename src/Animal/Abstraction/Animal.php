@@ -19,7 +19,7 @@ abstract class Animal implements IAnimal
     protected $age = '';
     protected $color = '';
     protected $satiety = 0;
-    protected $satietyMax = 0; //будем забивать вручную через __construct
+    protected $satietyMax = 0;
     protected $breed = '';
     protected $square = '';
     protected $inBox = 0;
@@ -35,10 +35,12 @@ abstract class Animal implements IAnimal
         $this->satietyMax = $satietyMax;
         $this->square = $square;
     }
+
     /**
      * Команда голос
      */
     abstract public function speak(): void;
+
     /**
      * Команда ползать
      */
@@ -47,13 +49,13 @@ abstract class Animal implements IAnimal
     /**
      * Покормить питомца
      *
-     * @param Feed $feed
+     * @param Feed $feed Корм
      */
     public function eat(Feed $feed) :void
     {
         $f = rand(0, $feed->getFeed($this));
         $this->satiety = $this->satiety+$f;
-        echo $this->name . ' съел ' . $f . ' гр. корма.<br>';  //$this->name съел столько-то
+        echo $this->name . ' съел ' . $f . ' гр. корма.' . "\n";  //$this->name съел столько-то
     }
 
     /**
@@ -61,28 +63,28 @@ abstract class Animal implements IAnimal
      */
     public function isHungry(): void
     {
-        if($this->satiety+20 >= $this->satietyMax) {
-            echo 'Животное ' . $this->name . ' сыто и валяется без задних ног<br>';
+        if ($this->satiety+20 >= $this->satietyMax) {
+            echo 'Животное ' . $this->name . ' сыто и валяется без задних ног' . "\n";
         } else {
-            echo 'Животное ' . $this->name . ' не сыто<br>';
+            echo 'Животное ' . $this->name . ' не сыто' . "\n";
         }
     }
 
     /**
      * Команда туалет
      *
-     * @param Box $box
+     * @param Box $box коробка в которую пойдут в туалет
      */
-    public function toilet(Box $box): void
+    public function toilet(Box $box = null): void
     {
-        if($this->satiety+20 >= $this->satietyMax) {
-            if($this->inBox == 1) {
+        if ($this->satiety+20 >= $this->satietyMax) {
+            if ($this->inBox == 1) {
                 $this->toiletInBox($box);
             } else {
                 $this->toiletOutside();
             }
         } else {
-            echo 'Животное ' . $this->name . ' не дошла до кондиции<br>';
+            echo 'Животное ' . $this->name . ' не дошла до кондиции' . "\n";
         }
     }
 
@@ -95,16 +97,16 @@ abstract class Animal implements IAnimal
     {
         $this->satiety -= 50;
         $box->getBoxCrap()->setCrap($box->getBoxCrap()->getCrapInBox()+50);
-        echo 'Животное ' . $this->name . ' сходила по номеру два внутри коробки.<br>';
+        echo 'Животное ' . $this->name . ' сходила по номеру два внутри коробки.' . "\n";
     }
 
     /**
-     * Команда туалет снаружи
+     * Команда туалет снаружи для тех кто не в коробке
      */
-    public function toiletOutside()
+    public function toiletOutside(): void
     {
         $this->satiety -= 50;
-        echo 'Животное ' . $this->name . ' сходила по номеру два.<br>';
+        echo 'Животное ' . $this->name . ' сходила по номеру два.' . "\n";
     }
 
     /**

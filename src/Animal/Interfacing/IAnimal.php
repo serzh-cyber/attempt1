@@ -8,7 +8,6 @@
 
 namespace App\Animal\Interfacing;
 
-
 use App\Box;
 use App\Feed;
 
@@ -39,7 +38,6 @@ interface IAnimal
      * Команда туалет
      *
      * @param Box $box
-     * @return mixed
      */
-    public function toilet(Box $box): void;
+    public function toilet(Box $box = null): void;
 }

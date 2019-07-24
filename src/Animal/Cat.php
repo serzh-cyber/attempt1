@@ -8,12 +8,10 @@
 
 namespace App\Animal;
 
-
 use App\Animal\Abstraction\Animal;
 
 class Cat extends Animal
 {
-    //protected $type = 0;
     protected $type = 0;
 
     /**
@@ -21,7 +19,7 @@ class Cat extends Animal
      */
     public function speak(): void
     {
-        echo 'Абырвалг' . '<br>';
+        echo 'Абырвалг' . "\n";
     }
 
     /**
@@ -29,7 +27,7 @@ class Cat extends Animal
      */
     public function crawl(): void
     {
-        echo 'Не БУДУ, Не БУДУ' . '<br>';
+        echo 'Не БУДУ, Не БУДУ' . "\n";
     }
 
     /**
