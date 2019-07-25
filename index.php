@@ -3,4 +3,5 @@
 require 'vendor/autoload.php';
 
 $app = new \App\Application();
-$app->startApplication();
+$html = new \App\ViewHtml();
+$html->viewHtml($app->run());

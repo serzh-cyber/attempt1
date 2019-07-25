@@ -9,16 +9,45 @@
 namespace App;
 
 use App\Animal\Abstraction\Animal;
+use App\Animal\Cat;
+use App\Animal\Dog;
 
 class Box
 {
-    const SQUARE = 10000; //const VOLUME = 1000000;
+    /**
+     * Площадь коробки
+     */
+    const SQUARE = 10000;
+
+    /**
+     * Максимально положенное количество экскрементов в коробке
+     */
     const CRAP_LIMIT = 300;
+
+    /**
+     * @var string цвет коробки
+     */
     protected $color = '';
+
+    /**
+     * @var array массив содержащий в себе объекты животных, находящихся в коробке
+     */
     public $petInBox = [];
+
+    /**
+     * @var int текущая площадь занятости коробки
+     */
     public $currentSpace = 0;
+
+    /**
+     * @var Crap|null объект класса Crap
+     */
     protected $boxCrap = null;
 
+    /**
+     * Box constructor.
+     * @param $color
+     */
     public function __construct($color)
     {
         $this->color = $color;
@@ -33,8 +62,7 @@ class Box
     public function getPetInBox($array): void
     {
         foreach ($array as $animal) {
-            $text = $this->isPlaceEnough($animal);
-            echo $text;
+            $this->isPlaceEnough($animal);
         }
     }
 
@@ -42,42 +70,37 @@ class Box
      * Вытаскивает животного из коробки
      *
      * @param Animal $animal
+     * @return bool
      */
-    public function getPetOutOfBox(Animal $animal): void
+    public function getPetOutOfBox(Animal $animal): bool
     {
         foreach ($this->petInBox as $key => $pet) {
             if ($pet == $animal) {
                 unset($this->petInBox[$key]);
                 $animal->setOutBox(0);
                 $this->freeSpace($animal);
-                echo 'Животное ' . $animal->getName() . ' было вытащено из коробки.' . "\n";
-                return;
+                return true;
             }
         }
-        echo 'Такого животного в коробке нет.' . "\n";
+        return false;
     }
 
     /**
      * Проверяет есть ли свободное место, если есть добавляет в массив объект $animal
      *
      * @param Animal $animal
-     * @return string
      */
-    public function isPlaceEnough(Animal $animal): string
+    public function isPlaceEnough(Animal $animal): void
     {
-        if ($animal->getSquare()+$this->currentSpace < self::SQUARE && $animal->getType() == 0) {
+        if ($animal->getSquare()+$this->currentSpace < self::SQUARE && get_class($animal) == Cat::class) {
             $this->petInBox[] = $animal;
             $this->currentSpace = $this->currentSpace + $animal->getSquare();
             $animal->setInbox(1);
-            return $text = 'Кошка ' . $animal->getName() . ' в коробке.' . "\n";
-
-        } elseif ($animal->getSquare()+$this->currentSpace < self::SQUARE && $animal->getType() == 1) {
+            //return $text = 'Кошка ' . $animal->getName() . ' в коробке.' . "\n";
+        } elseif ($animal->getSquare()+$this->currentSpace < self::SQUARE && get_class($animal) == Dog::class) {
             $this->petInBox[] = $animal;
             $this->currentSpace = $this->currentSpace + $animal->getSquare();
             $animal->setInbox(1);
-            return $text = 'Собакен ' . $animal->getName() . ' в коробке.' . "\n";
-        } else {
-            return $text = 'Не достаточно места в коробке для ' . $animal->getName() . ".\n";
         }
     }
 
@@ -92,33 +115,29 @@ class Box
     }
 
     /**
-     * Информация о коробке
-     */
-    public function inBoxInformation(): void
-    {
-        echo 'В коробке находится: ' . count($this->petInBox) . ' животных, коробка заполнена на: ' . $this->currentSpace . ' из 10000.' . "\n";
-    }
-
-    /**
      * Проверка на необходимость уборки в коробке
+     *
+     * @return bool
      */
-    public function clearRequired(): void
+    public function clearRequired(): bool
     {
         if ($this->boxCrap->getCrapInBox() >= self::CRAP_LIMIT) {
-            echo 'Экскрементов становиться слишком много, заполнилось на ' . $this->boxCrap->getCrapInBox() . ' из ' . self::CRAP_LIMIT . ' - в коробке нуждается в очищении.' . "\n";
-            $this->clearCrap();
+            return true;// 'Экскрементов становиться слишком много, заполнилось на ' . $this->boxCrap->getCrapInBox() . ' из ' . self::CRAP_LIMIT . ' - в коробке нуждается в очищении.' . "\n";
+            //$this->clearCrap();
         } else {
-            echo 'Коробка на данный момент в очищении не нуждается. заполнилось на ' . $this->boxCrap->getCrapInBox() . ' из ' . self::CRAP_LIMIT . ".\n";
+            return false;// 'Коробка на данный момент в очищении не нуждается. заполнилось на ' . $this->boxCrap->getCrapInBox() . ' из ' . self::CRAP_LIMIT . ".\n";
         }
     }
 
     /**
-     * Очищение корзины от экскрементов
+     * Очищение коробки от экскрементов
+     *
+     * @return bool
      */
-    public function clearCrap(): void
+    public function clearCrap(): bool
     {
         $this->boxCrap->setCrap(0);
-        echo 'Коробка очищена';
+        return true;
     }
 
     /**

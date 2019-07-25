@@ -14,16 +14,80 @@ use App\Feed;
 
 abstract class Animal implements IAnimal
 {
+    /**
+     * Кличка животного
+     *
+     * @var string
+     */
     protected $name = '';
+
+    /**
+     * Пол животного
+     *
+     * @var string
+     */
     protected $gender = '';
+
+    /**
+     * Возраст животного
+     *
+     * @var string
+     */
     protected $age = '';
+
+    /**
+     * Цвет шерсти животного
+     *
+     * @var string
+     */
     protected $color = '';
-    protected $satiety = 0;
-    protected $satietyMax = 0;
+
+    /**
+     * Порода
+     *
+     * @var string
+     */
     protected $breed = '';
+
+    /**
+     * Текущая сытость животного
+     *
+     * @var int
+     */
+    protected $satiety = 0;
+
+    /**
+     * Лимит сытости
+     *
+     * @var int
+     */
+    protected $satietyMax = 0;
+
+    /**
+     * Площадь которую занимает это животное
+     *
+     * @var string
+     */
     protected $square = '';
+
+    /**
+     * Статус в коробке - 1, не в коробке - 0
+     *
+     * @var int
+     */
     protected $inBox = 0;
 
+    /**
+     * Animal constructor.
+     * @param $name
+     * @param $age
+     * @param $gender
+     * @param $color
+     * @param $breed
+     * @param $satiety
+     * @param $satietyMax
+     * @param $square
+     */
     public function __construct($name, $age, $gender, $color, $breed, $satiety, $satietyMax, $square)
     {
         $this->name = $name;
@@ -39,12 +103,12 @@ abstract class Animal implements IAnimal
     /**
      * Команда голос
      */
-    abstract public function speak(): void;
+    abstract public function speak(): bool;
 
     /**
      * Команда ползать
      */
-    abstract public function crawl(): void;
+    abstract public function crawl(): bool;
 
     /**
      * Покормить питомца
@@ -55,18 +119,17 @@ abstract class Animal implements IAnimal
     {
         $f = rand(0, $feed->getFeed($this));
         $this->satiety = $this->satiety+$f;
-        echo $this->name . ' съел ' . $f . ' гр. корма.' . "\n";  //$this->name съел столько-то
     }
 
     /**
      * Проверка на сытость
      */
-    public function isHungry(): void
+    public function isHungry(): bool
     {
         if ($this->satiety+20 >= $this->satietyMax) {
-            echo 'Животное ' . $this->name . ' сыто и валяется без задних ног' . "\n";
+            return false;
         } else {
-            echo 'Животное ' . $this->name . ' не сыто' . "\n";
+            return true;
         }
     }
 
@@ -83,8 +146,6 @@ abstract class Animal implements IAnimal
             } else {
                 $this->toiletOutside();
             }
-        } else {
-            echo 'Животное ' . $this->name . ' не дошла до кондиции' . "\n";
         }
     }
 
@@ -97,7 +158,6 @@ abstract class Animal implements IAnimal
     {
         $this->satiety -= 50;
         $box->getBoxCrap()->setCrap($box->getBoxCrap()->getCrapInBox()+50);
-        echo 'Животное ' . $this->name . ' сходила по номеру два внутри коробки.' . "\n";
     }
 
     /**
@@ -106,7 +166,6 @@ abstract class Animal implements IAnimal
     public function toiletOutside(): void
     {
         $this->satiety -= 50;
-        echo 'Животное ' . $this->name . ' сходила по номеру два.' . "\n";
     }
 
     /**

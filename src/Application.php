@@ -9,10 +9,18 @@
 namespace App;
 
 
+use App\Animal\Dog;
+
 class Application
 {
-    public function startApplication()
+    /**
+     * Выполнение логики
+     *
+     * @return array массив из значений, которые нужно вывести
+     */
+    public function run()
     {
+        $arrStr = [];
         $animals = [
             new \App\Animal\Cat('Котэ', 2, 'f', 'red', 'koshak', rand(50, 150), 300, rand(400, 850)),
             new \App\Animal\Dog('Дог', 5, 'm', 'green', 'pitbulterriyer', rand(50, 150), 300, rand(700, 1200)),
@@ -32,52 +40,63 @@ class Application
 
         $box = new \App\Box('Red');
         $feed = new \App\Feed();
-
         $box->getPetInBox($animals);
-        echo '<hr>';
         $box->getPetOutOfBox($animals[3]);
-        echo '<hr>';
-        echo $box->inBoxInformation()  . "\n";
         $countBoxDog = 0;
         $countBoxCat = 0;
         $countDog = 0;
         $countCat = 0;
         foreach ($animals as $pet) {
             if ($pet->getInBox() == 1) {
-                if ($pet->getType() == 1) {
+                if (get_class($pet) == Dog::class) {
                     $countBoxDog++;
                 } else {
                     $countBoxCat++;
                 }
             } else {
-                if ($pet->getType() == 1) {
+                if (get_class($pet) == Dog::class) {
                     $countDog++;
                 } else {
                     $countCat++;
                 }
             }
         }
-        echo 'В коробке собак - ' . $countBoxDog . ', кошек - ' . $countBoxCat . ".\n";
+        $arrStr['petsInBox'] = count($box->petInBox);
+        $arrStr['dogsInBox'] = $countBoxDog;
+        $arrStr['catsInBox'] = $countBoxCat;
+        $countHungry = 0;
         foreach ($animals as $pet) {
             if ($pet->getInBox() == 1) {
                 $pet->eat($feed);
-                $pet->eat($feed);
-                $pet->isHungry();
-                echo '<hr>';
+                if ($pet->isHungry()) {
+                    $countHungry++;
+                }
             }
         }
-        echo 'Животных вне корбки осталось - ' . ($countCat+$countDog) .  '. Из них кошек - ' . $countCat . ', собак - ' . $countDog . ".\n";
+        $arrStr['hungryInBox'] = $countHungry;
+        $arrStr['fedInBox'] = $countBoxCat+$countBoxDog-$countHungry;
+        $countHungry = 0;
         foreach ($animals as $pet) {
             if ($pet->getInBox() == 0) {
                 $pet->eat($feed);
-                $pet->isHungry();
-                echo '<hr>';
+                if ($pet->isHungry()) {
+                    $countHungry++;
+                }
             }
         }
+        $arrStr['petsOutBox'] = $countCat+$countDog;
+        $arrStr['dogsOutBox'] = $countCat;
+        $arrStr['catsOutBox'] = $countDog;
+        $arrStr['hungryOutBox'] = $countHungry;
+        $arrStr['fedOutBox'] = $countCat+$countDog-$countHungry;
         foreach ($animals as $pet) {
             $pet->toilet($box);
-            echo '<hr>';
         }
-        $box->clearRequired();
+        if($box->clearRequired()) {
+            $arrStr['clearNeed'] = true;
+        } else {
+            $arrStr['clearNeed'] = false;
+        }
+        return $arrStr;
     }
 }

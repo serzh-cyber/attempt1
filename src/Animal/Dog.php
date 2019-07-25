@@ -12,29 +12,19 @@ use App\Animal\Abstraction\Animal;
 
 class Dog extends Animal
 {
-    protected $type = 1;
-
     /**
      * Команда голос
      */
-    public function speak(): void
+    public function speak(): bool
     {
-        echo 'Гав, Гав' . "\n";
+        return 'Гав, Гав' . "\n";
     }
 
     /**
      * Команда ползать
      */
-    public function crawl(): void
+    public function crawl(): bool
     {
-        echo 'ПОЛЗУ, ПОЛЗУ' . "\n";
-    }
-
-    /**
-     * @return int
-     */
-    public function getType(): int
-    {
-        return $this->type;
+        return 'ПОЛЗУ, ПОЛЗУ' . "\n";
     }
 }

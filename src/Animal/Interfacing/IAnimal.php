@@ -18,14 +18,14 @@ interface IAnimal
      *
      * void голос животного
      */
-    public function speak(): void;
+    public function speak(): bool;
 
     /**
      * Команда ползти
      *
      * void состояние на ползет
      */
-    public function crawl(): void;
+    public function crawl(): bool;
 
     /**
      * Покормить питомца
