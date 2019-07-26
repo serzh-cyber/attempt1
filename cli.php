@@ -10,4 +10,6 @@ require 'vendor/autoload.php';
 
 $app = new \App\Application();
 $cli = new \App\ViewCli();
-$cli->viewCli($app->run());
+$amount = new \App\AmountCli();
+
+$app->run($cli, $amount);

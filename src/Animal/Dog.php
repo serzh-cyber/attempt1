@@ -8,7 +8,7 @@
 
 namespace App\Animal;
 
-use App\Animal\Abstraction\Animal;
+use App\Abstraction\Animal;
 
 class Dog extends Animal
 {

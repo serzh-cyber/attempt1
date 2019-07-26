@@ -6,7 +6,7 @@
  * Time: 15:02
  */
 
-namespace App\Animal\Interfacing;
+namespace App\Interfacing;
 
 use App\Box;
 use App\Feed;

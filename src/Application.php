@@ -8,20 +8,24 @@
 
 namespace App;
 
-
+use App\Animal\Cat;
 use App\Animal\Dog;
+use App\Interfacing\IAmount;
+use App\Interfacing\View;
 
 class Application
 {
     /**
      * Выполнение логики
      *
-     * @return array массив из значений, которые нужно вывести
+     * @param View $view
+     * @param IAmount $amount
+     * @return mixed
      */
-    public function run()
+    public function run(View $view, IAmount $amount)
     {
-        $arrStr = [];
-        $animals = [
+        $arrStr     = [];
+        $animals    = [
             new \App\Animal\Cat('Котэ', 2, 'f', 'red', 'koshak', rand(50, 150), 300, rand(400, 850)),
             new \App\Animal\Dog('Дог', 5, 'm', 'green', 'pitbulterriyer', rand(50, 150), 300, rand(700, 1200)),
             new \App\Animal\Cat('Cot', 2, 'f', 'red', 'koshak', rand(50, 150), 300, rand(400, 850)),
@@ -38,14 +42,18 @@ class Application
             new \App\Animal\Dog('Свен', 5, 'm', 'green', 'pitbulterriyer', rand(50, 150), 300, rand(700, 1200)),
         ];
 
-        $box = new \App\Box('Red');
-        $feed = new \App\Feed();
-        $box->getPetInBox($animals);
+        $box    = new \App\Box('Red');
+        $feed   = new \App\Feed();
+
+        $petAmount = $amount->getAmount();
+        $animalsInBox = $box->getPetInBox($animals, $petAmount);
         $box->getPetOutOfBox($animals[3]);
-        $countBoxDog = 0;
-        $countBoxCat = 0;
-        $countDog = 0;
-        $countCat = 0;
+
+        $countBoxDog    = 0;
+        $countBoxCat    = 0;
+        $countDog       = 0;
+        $countCat       = 0;
+
         foreach ($animals as $pet) {
             if ($pet->getInBox() == 1) {
                 if (get_class($pet) == Dog::class) {
@@ -61,10 +69,12 @@ class Application
                 }
             }
         }
-        $arrStr['petsInBox'] = count($box->petInBox);
-        $arrStr['dogsInBox'] = $countBoxDog;
-        $arrStr['catsInBox'] = $countBoxCat;
-        $countHungry = 0;
+
+        $arrStr['petsInBox']    = count($box->petInBox);
+        $arrStr['dogsInBox']    = $countBoxDog;
+        $arrStr['catsInBox']    = $countBoxCat;
+        $countHungry            = 0;
+
         foreach ($animals as $pet) {
             if ($pet->getInBox() == 1) {
                 $pet->eat($feed);
@@ -73,9 +83,11 @@ class Application
                 }
             }
         }
-        $arrStr['hungryInBox'] = $countHungry;
-        $arrStr['fedInBox'] = $countBoxCat+$countBoxDog-$countHungry;
-        $countHungry = 0;
+
+        $arrStr['hungryInBox']  = $countHungry;
+        $arrStr['fedInBox']     = $countBoxCat+$countBoxDog-$countHungry;
+        $countHungry            = 0;
+
         foreach ($animals as $pet) {
             if ($pet->getInBox() == 0) {
                 $pet->eat($feed);
@@ -84,19 +96,19 @@ class Application
                 }
             }
         }
-        $arrStr['petsOutBox'] = $countCat+$countDog;
-        $arrStr['dogsOutBox'] = $countCat;
-        $arrStr['catsOutBox'] = $countDog;
+
+        $arrStr['petsOutBox']   = $countCat+$countDog;
+        $arrStr['dogsOutBox']   = $countCat;
+        $arrStr['catsOutBox']   = $countDog;
         $arrStr['hungryOutBox'] = $countHungry;
-        $arrStr['fedOutBox'] = $countCat+$countDog-$countHungry;
+        $arrStr['fedOutBox']    = $countCat+$countDog-$countHungry;
+
         foreach ($animals as $pet) {
             $pet->toilet($box);
         }
-        if($box->clearRequired()) {
-            $arrStr['clearNeed'] = true;
-        } else {
-            $arrStr['clearNeed'] = false;
-        }
-        return $arrStr;
+
+        $arrStr['clearNeed']    = $box->clearRequired();
+
+        return $view->viewer($arrStr);
     }
 }

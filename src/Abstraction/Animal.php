@@ -6,9 +6,9 @@
  * Time: 15:00
  */
 
-namespace App\Animal\Abstraction;
+namespace App\Abstraction;
 
-use App\Animal\Interfacing\IAnimal;
+use App\Interfacing\IAnimal;
 use App\Box;
 use App\Feed;
 
@@ -90,14 +90,14 @@ abstract class Animal implements IAnimal
      */
     public function __construct($name, $age, $gender, $color, $breed, $satiety, $satietyMax, $square)
     {
-        $this->name = $name;
-        $this->age = $age;
-        $this->gender = $gender;
-        $this->color = $color;
-        $this->breed = $breed;
-        $this->satiety = $satiety;
-        $this->satietyMax = $satietyMax;
-        $this->square = $square;
+        $this->name         = $name;
+        $this->age          = $age;
+        $this->gender       = $gender;
+        $this->color        = $color;
+        $this->breed        = $breed;
+        $this->satiety      = $satiety;
+        $this->satietyMax   = $satietyMax;
+        $this->square       = $square;
     }
 
     /**

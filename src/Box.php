@@ -8,7 +8,7 @@
 
 namespace App;
 
-use App\Animal\Abstraction\Animal;
+use App\Abstraction\Animal;
 use App\Animal\Cat;
 use App\Animal\Dog;
 
@@ -57,13 +57,27 @@ class Box
     /**
      * Добавление животного в коробку
      *
-     * @param $array
+     * @param $animals
+     * @param $petAmount
+     * @return array
      */
-    public function getPetInBox($array): void
+    public function getPetInBox($animals, $petAmount): array
     {
-        foreach ($array as $animal) {
-            $this->isPlaceEnough($animal);
+        echo $petAmount['puppy_count'] . ' and ' . $petAmount['kitty_count'];
+        $countDog = 0;
+        $countCat = 0;
+        foreach ($animals as $animal) {
+            if ($countDog !== (int)$petAmount['puppy_count'] && is_a($animal,Dog::class) && $this->getDogInBox($animal)) {
+                $countDog++;
+            }
+            if ($countCat !== (int)$petAmount['kitty_count'] && is_a($animal,Cat::class) && $this->getCatInBox($animal)) {
+                $countCat++;
+            }
         }
+        return [
+            'dog' => $countDog,
+            'cat' => $countCat,
+        ];
     }
 
     /**
@@ -86,21 +100,38 @@ class Box
     }
 
     /**
-     * Проверяет есть ли свободное место, если есть добавляет в массив объект $animal
+     * Проверяет есть ли свободное место, если есть добавляет в массив объект $animal собаку
      *
      * @param Animal $animal
+     * @return bool
      */
-    public function isPlaceEnough(Animal $animal): void
+    public function getDogInBox(Animal $animal): bool
     {
-        if ($animal->getSquare()+$this->currentSpace < self::SQUARE && get_class($animal) == Cat::class) {
+        if  ($animal->getSquare()+$this->currentSpace < self::SQUARE) {
             $this->petInBox[] = $animal;
             $this->currentSpace = $this->currentSpace + $animal->getSquare();
             $animal->setInbox(1);
-            //return $text = 'Кошка ' . $animal->getName() . ' в коробке.' . "\n";
-        } elseif ($animal->getSquare()+$this->currentSpace < self::SQUARE && get_class($animal) == Dog::class) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Проверяет есть ли свободное место, если есть добавляет в массив объект $animal кошку
+     *
+     * @param Animal $animal
+     * @return bool
+     */
+    public function getCatInBox(Animal $animal): bool
+    {
+        if ($animal->getSquare()+$this->currentSpace < self::SQUARE) {
             $this->petInBox[] = $animal;
             $this->currentSpace = $this->currentSpace + $animal->getSquare();
             $animal->setInbox(1);
+            return true;
+        } else {
+            return false;
         }
     }
 

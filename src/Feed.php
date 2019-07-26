@@ -8,7 +8,7 @@
 
 namespace App;
 
-use App\Animal\Abstraction\Animal;
+use App\Abstraction\Animal;
 
 class Feed
 {
